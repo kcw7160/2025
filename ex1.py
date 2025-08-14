@@ -1,2 +1,2 @@
 import streamlit as st
-st.title('내 첫 앱?!')
+st.title('내가 너를')
