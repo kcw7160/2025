@@ -12,9 +12,7 @@ category_info = {
     "락": {"color": "#FF69B4", "emoji": "❤️"} 
 }
 
-all_emotions = sum(emotions.values(), [])
-
-# 감정 목록 (희에서 '설렘' 제거, 락에서는 유지)
+# 감정 목록 (희에서 설렘 제거)
 emotions = {
     "희": ["기쁨", "행복", "감사", "안도", "자부심", "만족", "감격", "즐거움", "희망", "편안"],
     "노": ["분노", "짜증", "억울", "실망", "질투", "좌절", "불만", "화남", "격분", "모욕감"],
@@ -22,7 +20,10 @@ emotions = {
     "락": ["사랑", "연정", "설렘", "열정", "로맨스", "매혹", "호감", "달콤함", "기대", "열망"]
 }
 
-# 감정별 문학 구절 (미상 포함)
+# 전체 감정 리스트
+all_emotions = sum(emotions.values(), [])
+
+# 문학 구절 (각 감정별 2개)
 quotes = {
     # 희
     "기쁨":["기쁨은 나누면 배가 되고 슬픔은 나누면 반이 된다. - 한국 속담",
@@ -43,8 +44,8 @@ quotes = {
           "작은 즐거움이 모여 큰 행복이 된다. - 미상"],
     "희망":["희망은 어둠 속의 빛이다. - 미상",
           "희망을 잃지 않는 사람은 결코 길을 잃지 않는다. - 미상"],
-    "편안":["편안함은 마음의 쉼이다. - 미상",
-          "편안한 마음이 가장 큰 행복이다. - 미상"],
+    "편안":["편안함은 마음의 휴식이다. - 미상",
+           "마음을 내려놓을 때 편안함이 찾아온다. - 미상"],
 
     # 노
     "분노":["분노는 잠시 마음을 태우지만 상처는 오래 남는다. - 미상",
@@ -113,13 +114,30 @@ quotes = {
           "열망 없는 삶은 바람 없는 바다와 같다. - 미상"]
 }
 
-# 전체 감정 리스트
-all_emotions = sum(emotions.values(), [])
-
-# 컬럼으로 감정 선택 UI
+# 감정 선택 UI (세로로 나열)
 st.subheader("오늘의 감정을 선택하세요:")
-cols = st.columns(4)
 selected_emotion = None
 for i, emotion in enumerate(all_emotions):
-    col = cols[i % 4]
-   
+    category = next((k for k, v in emotions.items() if emotion in v), None)
+    emoji = category_info[category]["emoji"]
+    if st.button(f"{emoji} {emotion}", key=f"{emotion}_{i}"):
+        selected_emotion = emotion
+
+# 선택된 감정에 따른 문학 구절 출력
+if selected_emotion and selected_emotion in quotes:
+    category = next((k for k, v in emotions.items() if selected_emotion in v), None)
+    color = category_info[category]["color"]
+    emoji = category_info[category]["emoji"]
+    st.markdown(f"<h2 style='color:{color}'>{emoji} {selected_emotion} 감정에 맞는 문학 구절:</h2>", unsafe_allow_html=True)
+    for quote in quotes[selected_emotion]:
+        st.markdown(
+            f"""
+            <div style='background-color:{color}; 
+                        color:white;
+                        padding:15px; 
+                        border-radius:10px; 
+                        box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+                        margin-bottom:10px;
+                        font-size:16px;'>{quote}</div>
+            """, unsafe_allow_html=True
+        )
