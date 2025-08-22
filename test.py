@@ -123,8 +123,17 @@ for i, emotion in enumerate(all_emotions):
     category = next((k for k, v in emotions.items() if emotion in v), None)
     color = category_info[category]["color"]
     emoji = category_info[category]["emoji"]
-    if col.button(f"{emoji} {emotion}"):
+    selected_emotion = None
+for i, emotion in enumerate(all_emotions):
+    col = cols[i % 4]
+    category = next((k for k, v in emotions.items() if emotion in v), None)
+    color = category_info[category]["color"]
+    emoji = category_info[category]["emoji"]
+    
+    # key 추가: 중복 방지
+    if col.button(f"{emoji} {emotion}", key=f"{emotion}_{i}"):
         selected_emotion = emotion
+
 
 # 선택 감정 출력
 if selected_emotion and selected_emotion in quotes:
