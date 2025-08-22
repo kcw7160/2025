@@ -12,6 +12,8 @@ category_info = {
     "락": {"color": "#FF69B4", "emoji": "❤️"} 
 }
 
+all_emotions = sum(emotions.values(), [])
+
 # 감정 목록 (희에서 '설렘' 제거, 락에서는 유지)
 emotions = {
     "희": ["기쁨", "행복", "감사", "안도", "자부심", "만족", "감격", "즐거움", "희망", "편안"],
