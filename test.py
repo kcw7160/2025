@@ -116,6 +116,12 @@ all_emotions = sum(emotions.values(), [])
 
 # 컬럼으로 감정 선택 UI
 st.subheader("오늘의 감정을 선택하세요:")
+
+# 카드 영역 스타일
+st.markdown("""
+<div style="max-height:400px; overflow-y:scroll; border:1px solid #ccc; padding:10px; border-radius:10px;">
+""", unsafe_allow_html=True)
+
 cols = st.columns(4)
 selected_emotion = None
 for i, emotion in enumerate(all_emotions):
@@ -123,16 +129,27 @@ for i, emotion in enumerate(all_emotions):
     category = next((k for k, v in emotions.items() if emotion in v), None)
     color = category_info[category]["color"]
     emoji = category_info[category]["emoji"]
-    selected_emotion = None
-for i, emotion in enumerate(all_emotions):
-    col = cols[i % 4]
-    category = next((k for k, v in emotions.items() if emotion in v), None)
-    color = category_info[category]["color"]
-    emoji = category_info[category]["emoji"]
     
-    # key 추가: 중복 방지
+    # 버튼을 카드 스타일로
+    button_html = f"""
+    <div style="
+        background-color:{color};
+        color:white;
+        text-align:center;
+        padding:10px;
+        margin:5px;
+        border-radius:10px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        cursor:pointer;">
+        {emoji} {emotion}
+    </div>
+    """
+    
     if col.button(f"{emoji} {emotion}", key=f"{emotion}_{i}"):
         selected_emotion = emotion
+
+st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # 선택 감정 출력
